@@ -1,0 +1,80 @@
+pipeline:
+  name: optimus_prime
+
+  task: cross_scene
+  eval_task: False
+  restore_model: False
+
+  refer_dataset:
+    name: cross_scene_task
+    args:
+      tokenizer: bert_tokenizer
+      txt_seq_length: 150
+      pc_seq_length: 80
+      pc_type: 'pred'
+
+  lang_encoder:
+    name: bert_lang_encoder
+    args:
+        num_hidden_layer: 4
+     
+  point_encoder:
+    name: point_tokenize_encoder
+    args:
+      backbone: pointnet++
+      hidden_size: 768
+      path: ./model/vision/pretrained/point_encoder.pth
+      freeze_feature: False
+      num_attention_heads: 12
+      spatial_dim: 5
+      num_layers: 4
+      dim_loc: 6
+      pairwise_rel_type: center
+      mixup_strategy: linear_decay
+      mixup_stage1: 0.2
+      mixup_stage2: 0.4
+
+  unified_encoder:
+    name: unified_encoder_v2
+    args:
+      hidden_size: 768
+      num_attention_heads: 12
+      num_layers: 4
+      dim_loc: 6
+
+  ground_head:
+    name: ground_head_v1
+    args:
+      input_size: 768
+      hidden_size: 768
+      sem_cls_size: 607
+      dropout: 0.3
+
+  refer_loss:
+    name: refer_loss_v1
+
+
+  logger:
+    name: tensorboard_logger
+    args:
+      log_dir: ./runs/
+  
+  saver:
+    name: model_saver
+    args:
+      save_name: cross_scene.pth
+      save_dir: ./project/2026.2
+      load_dir: ./project/2026.2
+      load_name: cross_scene.pth
+
+  batch_size: 8
+  learning_rate: 1.0e-4
+  grad_norm: 3.0
+  epochs: 45
+  warmup_steps: 5
+  lang_lr_mul: 0.1
+  point_lr_mul: 0.1
+  unified_lr_mul: 1.0
+  beta1: 0.9
+  beta2: 0.98
+  
