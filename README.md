@@ -48,6 +48,10 @@ python3 setup.py install
 ```
 If you encounter any environment setup issues, please first refer to the [3D-VisTA issues page](https://github.com/3d-vista/3D-VisTA/issues).
 
+3. Pretrained models
+- [Bert](https://huggingface.co/google-bert/bert-base-uncased/tree/main) put into `model\language\bert`
+- [PointNet](https://drive.google.com/file/d/1LGANvrUsGhHXOzFz5_XtxCKCaSB-qBje/view?usp=drive_link) put into `model\vision\pretrained`
+
 ## Data 
 We follow 3D-VisTA for the use of [ScanRefer](https://daveredrum.github.io/ScanRefer/), [Nr3D](https://github.com/referit3d/referit3d) and [Sr3D](https://github.com/referit3d/referit3d) to ensure fair and comprehensive evaluation.
 For their data, you can directly download it and place it in the corresponding `/data/scanfamily/annotations` folder. [Here](https://drive.google.com/drive/folders/1qJJlUZZamDzTt5I3-CK2P3X6ZC88Z8NT?usp=drive_link) is the data we preprocessed based on 3D-VisTA.  
@@ -98,8 +102,10 @@ It look like:
 └── save_mask
 ```
 
-## Training 
-(The code files will be released soon.)
+## Training and Evaluation
+To run our CoRe on the proposed CrossScene-RETR dataset, please run the script: `CUDA_VISIBLE_DEVICES=0 python3 run.py --config project/core/cross_scene_config.yml`
+
+If you need to test, update the `load_dir` and `load_name` in `project/core/cross_scene_config.yml` with the training checkpoint path, set `eval_task` and `restore_model` to `True`, and then run the script: `CUDA_VISIBLE_DEVICES=0 python3 run.py --config project/core/cross_scene_config.yml`
 
 
 ## Acknowledge ✍
